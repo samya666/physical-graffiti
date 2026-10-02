@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Attic Library of Ancient Lore • Victorian Gothic Sanctum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-bright: #ffd700;
+      --gold-dim: #8c7322;
+      --blood-red: #8b0000;
+      --blood-red-glow: #e60026;
+      --dark-glass: rgba(10, 6, 8, 0.88);
+      --dark-card: rgba(18, 12, 16, 0.94);
+      --border-gilded: rgba(212, 175, 55, 0.35);
+      --border-crimson: rgba(180, 20, 30, 0.45);
+      --text-sub: #b3a79d;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #040102;
+      color: #ede5d8;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+      touch-action: none;
+    }
+
+    /* VIGNETTE OVERLAY (Blood Red & Shadow Gothic Edge) */
+    .vignette-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+      background: radial-gradient(
+        circle at 50% 45%,
+        transparent 45%,
+        rgba(25, 2, 5, 0.45) 75%,
+        rgba(5, 0, 2, 0.92) 100%
+      );
+      mix-blend-mode: multiply;
+    }
+
+    /* TOP HEADER BAR */
+    .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(6, 3, 5, 0.92) 0%, rgba(6, 3, 5, 0.6) 80%, transparent 100%);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-crest {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, #3d070e 0%, #150204 100%);
+      box-shadow: 0 0 14px rgba(180, 20, 30, 0.4);
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold-bright);
+    }
+
+    .brand-text h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    }
+
+    .brand-text p {
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ctrl-btn {
+      background: rgba(18, 10, 14, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #ede5d8;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(45, 15, 22, 0.9);
+      border-color: var(--gold-bright);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .ctrl-btn.active {
+      background: linear-gradient(135deg, rgba(80, 10, 22, 0.9) 0%, rgba(45, 5, 12, 0.9) 100%);
+      border-color: var(--blood-red-glow);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(230, 0, 38, 0.45);
+    }
+
+    /* LEFT OUTLINER PANEL (Matching Marble Composer UI in Screenshot 014720) */
+    .outliner-panel {
+      position: fixed;
+      top: 68px;
+      left: 18px;
+      width: 275px;
+      z-index: 10;
+      background: rgba(14, 10, 16, 0.92);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 20px rgba(180, 20, 30, 0.25);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .outliner-panel.collapsed {
+      transform: translateX(-300px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .outliner-header {
+      padding: 10px 14px;
+      background: rgba(26, 16, 28, 0.95);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      color: #f0e6d6;
+    }
+
+    .outliner-header span:first-child {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold-bright);
+    }
+
+    .outliner-list {
+      max-height: 480px;
+      overflow-y: auto;
+      padding: 6px 0;
+    }
+
+    .outliner-list::-webkit-scrollbar {
+      width: 5px;
+    }
+    .outliner-list::-webkit-scrollbar-thumb {
+      background: rgba(212, 175, 55, 0.3);
+      border-radius: 3px;
+    }
+
+    .outliner-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 14px;
+      font-size: 11px;
+      color: #d8cebf;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .outliner-item:hover {
+      background: rgba(60, 20, 32, 0.5);
+      color: #fff;
+    }
+
+    .outliner-item.splat-item {
+      background: rgba(73, 48, 130, 0.85);
+      color: #fff;
+      font-weight: 600;
+      border-left: 3px solid #b388ff;
+    }
+
+    .outliner-item.active {
+      background: rgba(90, 20, 40, 0.85);
+      color: #fff;
+      font-weight: 600;
+      border-left: 3px solid var(--blood-red-glow);
+    }
+
+    .item-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .item-icon {
+      font-size: 12px;
+      opacity: 0.85;
+    }
+
+    /* RIGHT ATMOSPHERE CONTROLS PANEL */
+    .controls-panel {
+      position: fixed;
+      top: 68px;
+      right: 18px;
+      width: 250px;
+      z-index: 10;
+      background: rgba(14, 10, 16, 0.92);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+      backdrop-filter: blur(12px);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .panel-section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      padding-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(212, 175, 55, 0.25);
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--gold-bright);
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(212,175,55,0.7);
+    }
+
+    /* BOTTOM CINEMATIC HUD */
+    .hud-bottom {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 960px;
+      z-index: 10;
+      background: var(--dark-glass);
+      border: 1px solid var(--border-gilded);
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 25px rgba(180, 20, 30, 0.25);
+      backdrop-filter: blur(14px);
+      padding: 16px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* WAYPOINTS SELECTOR */
+    .waypoint-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .wp-pill {
+      background: rgba(25, 14, 18, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      color: #d1c4b2;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .wp-pill:hover {
+      background: rgba(55, 18, 25, 0.9);
+      border-color: var(--gold);
+      color: #fff;
+    }
+
+    .wp-pill.active {
+      background: linear-gradient(135deg, rgba(140, 20, 35, 0.95) 0%, rgba(70, 10, 18, 0.95) 100%);
+      border-color: var(--blood-red-glow);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(230, 0, 38, 0.4);
+    }
+
+    /* TIMELINE SCRUBBER */
+    .timeline-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .timeline-bar {
+      position: relative;
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .timeline-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #d4af37 0%, #e60026 100%);
+      border-radius: 3px;
+      width: 0%;
+      box-shadow: 0 0 8px rgba(230, 0, 38, 0.6);
+    }
+
+    .timeline-scrubber {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      transform: translate(-50%, -50%);
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border: 2px solid var(--blood-red-glow);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+      cursor: grab;
+    }
+
+    .timeline-val {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold);
+      min-width: 36px;
+      text-align: right;
+    }
+
+    /* STATION INFO & ACTION BUTTONS */
+    .station-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .station-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .station-tag {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--gold-bright);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .station-title {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #fff;
+    }
+
+    .station-desc {
+      font-size: 11px;
+      line-height: 1.4;
+      color: var(--text-sub);
+    }
+
+    .station-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(30, 15, 20, 0.9);
+      border: 1px solid var(--gold);
+      color: var(--gold-bright);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .action-icon-btn:hover {
+      background: rgba(80, 15, 25, 0.95);
+      border-color: var(--blood-red-glow);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(230, 0, 38, 0.5);
+      transform: scale(1.08);
+    }
+
+    /* LOADING BANNER */
+    .loading-banner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 100;
+      background: rgba(12, 6, 8, 0.95);
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      padding: 32px 46px;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(0,0,0,0.95), 0 0 30px rgba(212,175,55,0.3);
+      transition: opacity 0.5s ease;
+    }
+    .loading-banner.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loading-spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(212,175,55,0.2);
+      border-top-color: var(--gold-bright);
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      animation: spin 1s infinite linear;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loading-title {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .loading-sub {
+      font-size: 12px;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 860px) {
+      .outliner-panel { display: none; }
+      .controls-panel { display: none; }
+      .hud-bottom { width: calc(100% - 24px); padding: 12px 14px; bottom: 12px; }
+      .station-desc { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="vignette-overlay"></div>
+
+  <!-- TOP HEADER -->
+  <header class="header-bar">
+    <div class="brand-group">
+      <div class="brand-crest">PG</div>
+      <div class="brand-text">
+        <h1>Physical Graffiti</h1>
+        <p>Victorian Attic Atelier • 3D Gaussian Splatting</p>
+      </div>
+    </div>
+    <div class="top-controls">
+      <button class="ctrl-btn active" id="btn-camera-mode" title="Toggle between Guided Camera Spline and Free Orbit">
+        <span id="cam-mode-icon">🎥</span> <span id="cam-mode-text">Tour Mode</span>
+      </button>
+      <button class="ctrl-btn active" id="btn-lighting-toggle" title="Toggle Gothic Blood-Red Lighting vs Unlit Albedo">
+        <span id="light-mode-icon">🩸</span> <span id="light-mode-text">Gothic Light</span>
+      </button>
+      <button class="ctrl-btn" id="btn-reset-cam" title="Reset to Screenshot 014740 Exact Camera Pose">
+        <span>📸</span> <span>Reset Shot</span>
+      </button>
+      <button class="ctrl-btn" id="btn-hold-grimoire" title="Fly and Hold on the Sacred Grimoire">
+        <span>📖</span> <span>Hold Grimoire</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- LEFT OUTLINER PANEL (Matching Screenshot 014720 Outliner) -->
+  <div class="outliner-panel" id="outliner-panel">
+    <div class="outliner-header">
+      <span><span>🗂️</span> Scene Objects</span>
+      <span style="font-size: 10px; color: var(--gold);">Composer v14</span>
+    </div>
+    <div class="outliner-list" id="outliner-list">
+      <div class="outliner-item splat-item active" data-name="splat">
+        <span class="item-label"><span class="item-icon">🌐</span> Attic Library of Ancient Lore</span>
+        <span style="font-size: 9px; opacity: 0.7;">.ply</span>
+      </div>
+      <div class="outliner-item" data-name="01_Lord_Archibald.glb">
+        <span class="item-label"><span class="item-icon">💀</span> 01_Lord_Archibald.glb</span>
+      </div>
+      <div class="outliner-item" data-name="03_Chaise_Lounge_Client.glb">
+        <span class="item-label"><span class="item-icon">🛋️</span> 03_Chaise_Lounge_Client.glb</span>
+      </div>
+      <div class="outliner-item" data-name="04_Lady_Evangeline.glb">
+        <span class="item-label"><span class="item-icon">👰</span> 04_Lady_Evangeline.glb</span>
+      </div>
+      <div class="outliner-item" data-name="Anatomical Wall Chart.glb">
+        <span class="item-label"><span class="item-icon">🖼️</span> Anatomical Wall Chart.glb</span>
+      </div>
+      <div class="outliner-item" data-name="Victorian Apothecary Set.glb">
+        <span class="item-label"><span class="item-icon">🧪</span> Victorian Apothecary Set.glb</span>
+      </div>
+      <div class="outliner-item" data-name="Victorian Brass Tattoo Machine.glb">
+        <span class="item-label"><span class="item-icon">🖋️</span> Victorian Brass Tattoo Machine.glb</span>
+      </div>
+      <div class="outliner-item" data-name="Victorian Gothic Chandelier.glb">
+        <span class="item-label"><span class="item-icon">🕯️</span> Victorian Gothic Chandelier.glb</span>
+      </div>
+      <div class="outliner-item" data-name="Victorian Grimoire.glb">
+        <span class="item-label"><span class="item-icon">📖</span> Victorian Grimoire.glb</span>
+      </div>
+      <div class="outliner-item" data-name="Victorian Writing Desk.glb">
+        <span class="item-label"><span class="item-icon">🪵</span> Victorian Writing Desk.glb</span>
+      </div>
+      <div class="outliner-item" data-name="03_Chaise_Lounge_Client.glb_2">
+        <span class="item-label"><span class="item-icon">🛋️</span> 03_Chaise_Lounge_Client.glb</span>
+      </div>
+      <div class="outliner-item" data-name="Victorian Skeleton Gentleman.glb">
+        <span class="item-label"><span class="item-icon">🎩</span> Victorian Skeleton Gentleman.glb</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT ATMOSPHERE CONTROLS -->
+  <div class="controls-panel" id="controls-panel">
+    <div class="panel-section-title">
+      <span>Atmospheric Lighting</span>
+      <span>🕯️</span>
+    </div>
+    <div class="slider-group">
+      <div class="slider-header">
+        <span>Blood-Red Tint</span>
+        <span id="val-red-tint">100%</span>
+      </div>
+      <input type="range" id="slider-red-tint" min="0" max="200" value="100">
+    </div>
+    <div class="slider-group">
+      <div class="slider-header">
+        <span>Candle Flame Flicker</span>
+        <span id="val-flicker">Active</span>
+      </div>
+      <input type="range" id="slider-flicker" min="0" max="150" value="100">
+    </div>
+    <div class="slider-group">
+      <div class="slider-header">
+        <span>Volumetric Floor Fog</span>
+        <span id="val-fog">Dense</span>
+      </div>
+      <input type="range" id="slider-fog" min="0" max="150" value="100">
+    </div>
+    <div class="slider-group">
+      <div class="slider-header">
+        <span>Tone Exposure</span>
+        <span id="val-exposure">0.90</span>
+      </div>
+      <input type="range" id="slider-exposure" min="40" max="180" value="90">
+    </div>
+  </div>
+
+  <!-- BOTTOM CINEMATIC HUD -->
+  <div class="hud-bottom">
+    <div class="waypoint-row">
+      <button class="wp-pill active" data-progress="0.0">01 • Establishing (Screenshot 014740)</button>
+      <button class="wp-pill" data-progress="0.30">02 • Archibald & Client</button>
+      <button class="wp-pill" data-progress="0.55">03 • Evangeline & Desk</button>
+      <button class="wp-pill" data-progress="0.75">04 • Chandelier Candles</button>
+      <button class="wp-pill" data-progress="1.00">05 • Sacred Grimoire (Held)</button>
+    </div>
+
+    <div class="timeline-container">
+      <div class="timeline-bar" id="timeline-track">
+        <div class="timeline-fill" id="timeline-fill"></div>
+        <div class="timeline-scrubber" id="timeline-scrubber"></div>
+      </div>
+      <div class="timeline-val" id="timeline-val">0%</div>
+    </div>
+
+    <div class="station-info">
+      <div class="station-text">
+        <span class="station-tag" id="hud-tag">Station 0 • Establishing Shot</span>
+        <h2 class="station-title" id="hud-title">Victorian Attic Sanctuary</h2>
+        <p class="station-desc" id="hud-desc">Matching Screenshot 014740: Vaulted timber rafters, gothic chandelier with burning candles, and glowing blue stained-glass rose window.</p>
+      </div>
+      <div class="station-actions">
+        <button class="action-icon-btn" id="btn-play-pause" title="Play/Pause Cinematic Auto-Flythrough">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING BANNER -->
+  <div class="loading-banner" id="loading-banner">
+    <div class="loading-spinner"></div>
+    <div class="loading-title">Unfolding Victorian Attic Atelier</div>
+    <div class="loading-sub" id="loading-sub">Streaming 500k Gaussians & Skeletal Inkers...</div>
+  </div>
+
+  <!-- MODULE IMPORT MAP -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.180.0/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+        "@sparkjsdev/spark": "./spark.module.min.js"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+    import { SparkRenderer, SplatMesh, SparkControls, utils } from "@sparkjsdev/spark";
+
+    const URL_BASE = ".";
+
+    // 1. THREE.JS SCENE SETUP (DARK & GLOOMY WITH BLOOD RED TINT)
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x040102); // Deepest gothic obsidian-crimson
+    scene.fog = new THREE.FogExp2(0x0a0103, 0.045); // Moody blood-red atmospheric fog
+
+    // Starting Camera Pose matching Screenshot 2026-09-25 014740.png
+    const START_POS = new THREE.Vector3(0.00, 1.62, 3.65);
+    const START_LOOKAT = new THREE.Vector3(0.00, 1.35, -3.20);
+    const GRIMOIRE_POS = new THREE.Vector3(0.00, 1.25, -2.60);
+    const GRIMOIRE_LOOKAT = new THREE.Vector3(0.00, 0.95, -3.45);
+
+    const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.05, 1000);
+    camera.position.copy(START_POS);
+    camera.lookAt(START_LOOKAT);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.90; // Gloomy dim chiaroscuro exposure
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    document.body.appendChild(renderer.domElement);
+
+    // Local frame for Spark
+    const localFrame = new THREE.Group();
+    scene.add(localFrame);
+
+    const spark = new SparkRenderer({
+      renderer,
+      maxStdDev: Math.sqrt(5),
+    });
+    scene.add(spark);
+    localFrame.add(camera);
+
+    const controls = new SparkControls({ canvas: renderer.domElement });
+    controls.pointerControls.reverseRotate = utils.isMobile();
+    controls.pointerControls.rotateSpeed *= 1.5;
+    controls.pointerControls.slideSpeed *= 0.75;
+    controls.enabled = false;
+
+    // 2. PROCEDURAL TEXTURES (FLAMES & HALOS)
+    function createFlameTexture() {
+      const c = document.createElement("canvas");
+      c.width = 128;
+      c.height = 256;
+      const ctx = c.getContext("2d");
+      ctx.clearRect(0, 0, 128, 256);
+
+      // Teardrop outer glow & flame body
+      const grad = ctx.createRadialGradient(64, 180, 4, 64, 140, 70);
+      grad.addColorStop(0.0, "rgba(255, 255, 240, 1.0)"); // Incandescent white core
+      grad.addColorStop(0.18, "rgba(255, 215, 60, 0.95)"); // Golden yellow heart
+      grad.addColorStop(0.45, "rgba(255, 95, 15, 0.85)");  // Fiery amber body
+      grad.addColorStop(0.75, "rgba(190, 18, 12, 0.50)");  // Crimson red tongue
+      grad.addColorStop(1.0, "rgba(60, 0, 8, 0.0)");       // Soft transparent edge
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(64, 25);
+      ctx.bezierCurveTo(96, 100, 112, 185, 64, 230);
+      ctx.bezierCurveTo(16, 185, 32, 100, 64, 25);
+      ctx.closePath();
+      ctx.fill();
+
+      // Blue combustion base around wick
+      const blueGrad = ctx.createRadialGradient(64, 224, 2, 64, 224, 16);
+      blueGrad.addColorStop(0.0, "rgba(90, 150, 255, 0.85)");
+      blueGrad.addColorStop(0.6, "rgba(35, 65, 210, 0.40)");
+      blueGrad.addColorStop(1.0, "rgba(0, 0, 120, 0.0)");
+      ctx.fillStyle = blueGrad;
+      ctx.beginPath();
+      ctx.arc(64, 224, 16, 0, Math.PI * 2);
+      ctx.fill();
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    function createFlameHaloTexture() {
+      const c = document.createElement("canvas");
+      c.width = 128;
+      c.height = 128;
+      const ctx = c.getContext("2d");
+      const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 62);
+      grad.addColorStop(0.0, "rgba(255, 220, 130, 0.95)");
+      grad.addColorStop(0.25, "rgba(255, 120, 30, 0.55)");
+      grad.addColorStop(0.65, "rgba(200, 25, 25, 0.18)");
+      grad.addColorStop(1.0, "rgba(0, 0, 0, 0.0)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 128, 128);
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    function createVolumetricMistTexture() {
+      const c = document.createElement("canvas");
+      c.width = 256;
+      c.height = 256;
+      const ctx = c.getContext("2d");
+      ctx.clearRect(0, 0, 256, 256);
+      for (let i = 0; i < 9; i++) {
+        const cx = 128 + (Math.random() - 0.5) * 70;
+        const cy = 128 + (Math.random() - 0.5) * 60;
+        const r = 55 + Math.random() * 50;
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        grad.addColorStop(0.0, "rgba(255, 255, 255, 0.28)");
+        grad.addColorStop(0.45, "rgba(255, 255, 255, 0.12)");
+        grad.addColorStop(1.0, "rgba(255, 255, 255, 0.0)");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    // 3. ATMOSPHERIC VICTORIAN LIGHTING SYSTEM (DARK & GLOOMY WITH BLOOD RED TINT)
+    const lightingGroup = new THREE.Group();
+    scene.add(lightingGroup);
+
+    // Deep Blood-Red Gothic Ambient Fill
+    const ambientLight = new THREE.AmbientLight(0x280306, 0.65);
+    lightingGroup.add(ambientLight);
+
+    // Directional Gothic Blood-Red Rake Light (sweeping rafters & skeletons)
+    const bloodRedRake = new THREE.DirectionalLight(0xa30818, 2.5);
+    bloodRedRake.position.set(-5.5, 6.5, 4.0);
+    bloodRedRake.castShadow = true;
+    lightingGroup.add(bloodRedRake);
+
+    // Dim Desaturated Slate-Cyan Moonlight (Cold contrast through dormer window)
+    const moonLight = new THREE.DirectionalLight(0x223545, 0.55);
+    moonLight.position.set(-6.0, 9.5, -5.0);
+    moonLight.castShadow = true;
+    lightingGroup.add(moonLight);
+
+    // Occult Altar Ruby Point Light (Sanctum under-glow)
+    const altarRuby = new THREE.PointLight(0xb8081a, 3.5, 12, 1.8);
+    altarRuby.position.set(0.0, 0.85, -3.5);
+    lightingGroup.add(altarRuby);
+
+    // Sanctum Altar Focal Spotlight
+    const altarSpot = new THREE.SpotLight(0xffb566, 3.0, 16, Math.PI / 5, 0.6, 1.3);
+    altarSpot.position.set(0, 5.0, -3.0);
+    altarSpot.target.position.set(0, 0.95, -3.45);
+    lightingGroup.add(altarSpot);
+    lightingGroup.add(altarSpot.target);
+
+    // Warm Victorian Gaslights / Station Lamps
+    const gaslights = [
+      {
+        light: new THREE.PointLight(0xdd6820, 2.2, 9, 1.6),
+        baseIntensity: 2.2,
+        pos: new THREE.Vector3(-2.2, 2.0, 1.8),
+        color: 0xdd6820
+      },
+      {
+        light: new THREE.PointLight(0xba3018, 2.0, 9, 1.6),
+        baseIntensity: 2.0,
+        pos: new THREE.Vector3(2.1, 2.0, 0.4),
+        color: 0xba3018
+      },
+      {
+        light: new THREE.PointLight(0xa81120, 2.5, 10, 1.6),
+        baseIntensity: 2.5,
+        pos: new THREE.Vector3(0.0, 2.4, -4.2),
+        color: 0xa81120
+      }
+    ];
+
+    gaslights.forEach((gl) => {
+      gl.light.position.copy(gl.pos);
+      lightingGroup.add(gl.light);
+
+      const glowGeo = new THREE.SphereGeometry(0.04, 16, 16);
+      const glowMat = new THREE.MeshBasicMaterial({ color: gl.color });
+      const glowMesh = new THREE.Mesh(glowGeo, glowMat);
+      glowMesh.position.copy(gl.pos);
+      lightingGroup.add(glowMesh);
+    });
+
+    // 4. VICTORIAN CHANDELIER CANDLE FLAME SYSTEM
+    const chandelierCandleGroup = new THREE.Group();
+    lightingGroup.add(chandelierCandleGroup);
+
+    const flameTex = createFlameTexture();
+    const haloTex = createFlameHaloTexture();
+    const chandelierCandles = [];
+
+    // Chandelier base location matching Screenshot 014720 [0.00, 3.12, -1.60]
+    const CHANDELIER_BASE = new THREE.Vector3(0.00, 3.12, -1.60);
+    const CANDLE_RADIUS = 0.42;
+
+    const waxMaterial = new THREE.MeshStandardMaterial({
+      color: 0xd6cbb5,
+      roughness: 0.65,
+      metalness: 0.08
+    });
+
+    // 7 candles: 1 central pinnacle candle + 6 surrounding ring candles
+    const candleRingPositions = [
+      { x: 0.00, y: 0.08, z: 0.00 },
+      ...Array.from({ length: 6 }).map((_, i) => {
+        const a = (i / 6) * Math.PI * 2;
+        return { x: Math.cos(a) * CANDLE_RADIUS, y: 0.00, z: Math.sin(a) * CANDLE_RADIUS };
+      })
+    ];
+
+    candleRingPositions.forEach((pos, idx) => {
+      const candleObj = new THREE.Group();
+      candleObj.position.set(
+        CHANDELIER_BASE.x + pos.x,
+        CHANDELIER_BASE.y + pos.y,
+        CHANDELIER_BASE.z + pos.z
+      );
+
+      // Wax pillar
+      const waxGeo = new THREE.CylinderGeometry(0.015, 0.017, 0.16, 12);
+      const waxMesh = new THREE.Mesh(waxGeo, waxMaterial);
+      waxMesh.position.y = 0.08;
+      waxMesh.castShadow = true;
+      candleObj.add(waxMesh);
+
+      // Blackened wick
+      const wickGeo = new THREE.CylinderGeometry(0.002, 0.002, 0.024, 6);
+      const wickMat = new THREE.MeshBasicMaterial({ color: 0x111111 });
+      const wickMesh = new THREE.Mesh(wickGeo, wickMat);
+      wickMesh.position.y = 0.17;
+      candleObj.add(wickMesh);
+
+      // Animated Flame Teardrop Billboard
+      const flameContainer = new THREE.Group();
+      flameContainer.position.y = 0.18;
+
+      const flameMat = new THREE.SpriteMaterial({
+        map: flameTex,
+        color: 0xffffff,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        transparent: true
+      });
+      const flameSprite = new THREE.Sprite(flameMat);
+      flameSprite.scale.set(0.12, 0.24, 1.0);
+      flameSprite.center.set(0.5, 0.15);
+      flameContainer.add(flameSprite);
+
+      // Pulsing Candle Halo
+      const haloMat = new THREE.SpriteMaterial({
+        map: haloTex,
+        color: 0xffa030,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        transparent: true,
+        opacity: 0.85
+      });
+      const haloSprite = new THREE.Sprite(haloMat);
+      haloSprite.scale.set(0.38, 0.38, 1.0);
+      haloSprite.center.set(0.5, 0.45);
+      flameContainer.add(haloSprite);
+
+      candleObj.add(flameContainer);
+
+      // Dynamic Candle Point Light (casting warm chiaroscuro onto rafters)
+      const candleLight = new THREE.PointLight(0xff8a24, 0.85, 4.8, 1.7);
+      candleLight.position.y = 0.22;
+      candleLight.castShadow = (idx === 0 || idx === 3);
+      candleObj.add(candleLight);
+
+      chandelierCandleGroup.add(candleObj);
+
+      chandelierCandles.push({
+        group: candleObj,
+        light: candleLight,
+        flameContainer: flameContainer,
+        flame: flameSprite,
+        halo: haloSprite,
+        baseIntensity: 0.85,
+        phase: idx * 1.05 + Math.random() * 0.5,
+        swaySpeed: 1.8 + Math.random() * 0.8
+      });
+    });
+
+    // 5. VOLUMETRIC FOG FLOATING ABOVE FLOOR
+    const volumetricFogGroup = new THREE.Group();
+    scene.add(volumetricFogGroup);
+
+    const groundFogShader = {
+      uniforms: {
+        uTime: { value: 0.0 },
+        uColorBase: { value: new THREE.Color(0x35040a) },       // Deep gloomy blood red base
+        uColorHighlight: { value: new THREE.Color(0x820c18) },  // Blood crimson highlight
+        uColorCandle: { value: new THREE.Color(0xd66518) },     // Amber candlelight scatter
+        uChandelierPos: { value: CHANDELIER_BASE }
+      },
+      vertexShader: `
+        varying vec3 vWorldPosition;
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          vec4 worldPos = modelMatrix * vec4(position, 1.0);
+          vWorldPosition = worldPos.xyz;
+          gl_Position = projectionMatrix * viewMatrix * worldPos;
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        uniform vec3 uColorBase;
+        uniform vec3 uColorHighlight;
+        uniform vec3 uColorCandle;
+        uniform vec3 uChandelierPos;
+        varying vec3 vWorldPosition;
+        varying vec2 vUv;
+
+        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+        float snoise(vec2 v) {
+          const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+          vec2 i  = floor(v + dot(v, C.yy) );
+          vec2 x0 = v -   i + dot(i, C.xx);
+          vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+          vec4 x12 = x0.xyxy + C.xxzz;
+          x12.xy -= i1;
+          i = mod289(i);
+          vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+          vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+          m = m*m;
+          m = m*m;
+          vec3 x = 2.0 * fract(p * C.www) - 1.0;
+          vec3 h = abs(x) - 0.5;
+          vec3 ox = floor(x + 0.5);
+          vec3 a0 = x - ox;
+          m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+          vec3 g;
+          g.x  = a0.x  * x0.x  + h.x  * x0.y;
+          g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+          return 130.0 * dot(m, g);
+        }
+
+        float fbm(vec2 p) {
+          float total = 0.0;
+          float amp = 0.5;
+          for (int i = 0; i < 4; i++) {
+            total += amp * snoise(p);
+            p = p * 2.05 + vec2(1.5, 2.7);
+            amp *= 0.5;
+          }
+          return total;
+        }
+
+        void main() {
+          // Strict Height Falloff (floating above floor y=0.03 to y=0.55)
+          float y = vWorldPosition.y;
+          float heightFactor = smoothstep(0.02, 0.12, y) * smoothstep(0.55, 0.18, y);
+
+          vec2 flow1 = vec2(uTime * 0.028, uTime * 0.016);
+          vec2 flow2 = vec2(-uTime * 0.019, uTime * 0.024);
+          float n1 = fbm(vWorldPosition.xz * 0.32 + flow1);
+          float n2 = snoise(vWorldPosition.xz * 0.68 + flow2);
+          float noise = mix(n1, n2, 0.35) * 0.5 + 0.5;
+
+          float density = heightFactor * noise;
+
+          // Radial falloff from sanctum center
+          float distCenter = length(vWorldPosition.xz - vec2(0.0, -1.0));
+          density *= smoothstep(8.5, 3.2, distCenter);
+
+          if (density < 0.02) discard;
+
+          // Color Scattering with Blood Red Gloom & Warm Candlelight
+          float distToChandelier = length(vWorldPosition - uChandelierPos);
+          float candleSpill = smoothstep(4.8, 0.4, distToChandelier);
+
+          vec3 mistColor = mix(uColorBase, uColorHighlight, noise * 0.75);
+          mistColor = mix(mistColor, uColorCandle, candleSpill * 0.45);
+
+          float alpha = clamp(density * 0.75, 0.0, 0.80);
+          gl_FragColor = vec4(mistColor, alpha);
+        }
+      `
+    };
+
+    const fogMaterial = new THREE.ShaderMaterial({
+      uniforms: groundFogShader.uniforms,
+      vertexShader: groundFogShader.vertexShader,
+      fragmentShader: groundFogShader.fragmentShader,
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    });
+
+    // 5 Horizontal Stratified Slabs floating at distinct heights above the floor
+    const slabHeights = [0.06, 0.12, 0.20, 0.32, 0.45];
+    slabHeights.forEach((h) => {
+      const slabGeo = new THREE.PlaneGeometry(16, 18, 32, 32);
+      slabGeo.rotateX(-Math.PI / 2);
+      const slabMesh = new THREE.Mesh(slabGeo, fogMaterial);
+      slabMesh.position.set(0, h, -1.0);
+      volumetricFogGroup.add(slabMesh);
+    });
+
+    // Rolling Volumetric Ground Fog Particle Billows
+    const mistTex = createVolumetricMistTexture();
+    const mistPuffs = [];
+    const mistGeo = new THREE.PlaneGeometry(2.0, 2.0);
+    const mistMat = new THREE.MeshBasicMaterial({
+      map: mistTex,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.NormalBlending,
+      side: THREE.DoubleSide
+    });
+
+    for (let i = 0; i < 75; i++) {
+      const puff = new THREE.Mesh(mistGeo, mistMat.clone());
+      puff.rotation.x = -Math.PI / 2;
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 0.5 + Math.random() * 5.5;
+      const x = Math.cos(angle) * radius * 1.1;
+      const z = -1.2 + Math.sin(angle) * radius * 1.3;
+      const y = 0.05 + Math.random() * 0.38; // Floating strictly above floor
+
+      puff.position.set(x, y, z);
+      const scale = 1.2 + Math.random() * 1.4;
+      puff.scale.set(scale, scale, 1.0);
+
+      const isNearChandelier = (Math.hypot(x - CHANDELIER_BASE.x, z - CHANDELIER_BASE.z) < 2.5);
+      if (isNearChandelier) {
+        puff.material.color.setHex(0x7a2818); // Amber-crimson near candles
+      } else {
+        puff.material.color.setHex(0x480812); // Deep blood red gloom
+      }
+      puff.material.opacity = 0.22 + Math.random() * 0.25;
+
+      volumetricFogGroup.add(puff);
+      mistPuffs.push({
+        mesh: puff,
+        baseY: y,
+        origX: x,
+        origZ: z,
+        speed: 0.15 + Math.random() * 0.25,
+        rotSpeed: (Math.random() - 0.5) * 0.12,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+
+    // Floating Gothic Embers & Ruby Sparks
+    const dustCount = 450;
+    const dustGeo = new THREE.BufferGeometry();
+    const dustPos = new Float32Array(dustCount * 3);
+    const dustColors = new Float32Array(dustCount * 3);
+
+    for (let i = 0; i < dustCount; i++) {
+      dustPos[i * 3] = (Math.random() - 0.5) * 16;
+      dustPos[i * 3 + 1] = Math.random() * 5.2;
+      dustPos[i * 3 + 2] = (Math.random() - 0.5) * 16;
+
+      if (Math.random() > 0.4) {
+        dustColors[i * 3] = 0.95;
+        dustColors[i * 3 + 1] = 0.72;
+        dustColors[i * 3 + 2] = 0.22;
+      } else {
+        dustColors[i * 3] = 0.85;
+        dustColors[i * 3 + 1] = 0.08;
+        dustColors[i * 3 + 2] = 0.16;
+      }
+    }
+    dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+    dustGeo.setAttribute('color', new THREE.BufferAttribute(dustColors, 3));
+
+    const dustMat = new THREE.PointsMaterial({
+      size: 0.038,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.75,
+      blending: THREE.AdditiveBlending
+    });
+    const dustParticles = new THREE.Points(dustGeo, dustMat);
+    scene.add(dustParticles);
+
+    // 6. LOAD GAUSSIAN SPLATTING SCENE & 3D MESHES
+    const loadedMeshesMap = new Map();
+    let splatMeshObj = null;
+
+    const scene_json = await fetch(`${URL_BASE}/scene.json`).then(r => r.json());
+    const splats = scene_json.splats ?? [];
+
+    for (const splat of splats) {
+      try {
+        splatMeshObj = new SplatMesh({ url: `${URL_BASE}/${splat.filename}`, lod: true });
+        splatMeshObj.position.fromArray(splat.transform?.translation ?? [0, 0, 0]);
+        splatMeshObj.quaternion.fromArray(splat.transform?.quaternion ?? [0, 0, 0, 1]);
+        const scale = splat.transform?.scale ?? 1;
+        splatMeshObj.scale.set(scale, scale, scale);
+        scene.add(splatMeshObj);
+        console.log(`Loaded Splat: ${splat.filename}`);
+      } catch (err) {
+        console.error(`Error loading splat ${splat.filename}:`, err);
+      }
+    }
+
+    // Load 3D Meshes
+    const characterGroup = new THREE.Group();
+    scene.add(characterGroup);
+
+    const meshesToLoad = scene_json.meshes ?? [];
+    const gltfLoader = new GLTFLoader();
+
+    for (let i = 0; i < meshesToLoad.length; i++) {
+      const spec = meshesToLoad[i];
+      try {
+        const fileUrl = encodeURI(`${URL_BASE}/${spec.filename}`);
+        const gltf = await gltfLoader.loadAsync(fileUrl);
+        const m = gltf.scene;
+        m.name = spec.name;
+
+        if (spec.transform?.translation) {
+          m.position.fromArray(spec.transform.translation);
+        }
+        if (spec.transform?.quaternion) {
+          m.quaternion.fromArray(spec.transform.quaternion);
+        } else if (spec.transform?.rotation) {
+          m.rotation.set(
+            THREE.MathUtils.degToRad(spec.transform.rotation[0]),
+            THREE.MathUtils.degToRad(spec.transform.rotation[1]),
+            THREE.MathUtils.degToRad(spec.transform.rotation[2])
+          );
+        }
+        if (spec.transform?.scale) {
+          if (Array.isArray(spec.transform.scale)) {
+            m.scale.fromArray(spec.transform.scale);
+          } else {
+            const s = Number(spec.transform.scale);
+            m.scale.set(s, s, s);
+          }
+        }
+
+        m.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            if (child.material) {
+              child.material.roughness = Math.min(child.material.roughness ?? 0.7, 0.85);
+            }
+          }
+        });
+
+        characterGroup.add(m);
+        // Map mesh for outliner click-to-focus
+        const key = (i === 9) ? `${spec.name}_2` : spec.name;
+        loadedMeshesMap.set(key, m);
+        console.log(`Loaded mesh [${i}]: ${spec.name}`);
+      } catch (err) {
+        console.error(`Failed to load mesh ${spec.name} (${spec.filename}):`, err);
+      }
+    }
+
+    // Hide loading banner
+    setTimeout(() => {
+      const banner = document.getElementById("loading-banner");
+      if (banner) banner.classList.add("hidden");
+    }, 1000);
+
+    // 7. CINEMATIC 3D CAMERA MOTION SYSTEM
+    const waypoints = [
+      {
+        progress: 0.0,
+        tag: "Station 0 • Grand Nave Establishing",
+        title: "Victorian Attic Atelier",
+        desc: "Establishing angle matching Screenshot 014740 — looking down the cathedral aisle framed by vaulted timber rafters, gothic chandelier, and blue stained-glass rose window.",
+        pos: START_POS.clone(),
+        lookAt: START_LOOKAT.clone()
+      },
+      {
+        progress: 0.30,
+        tag: "Station I • Lord Archibald & Armchair Patron",
+        title: "The Bespoke Consultation",
+        desc: "The gentleman inker in teal velvet tailcoat and top hat attending to the patron seated upon the tufted oxblood armchair.",
+        pos: new THREE.Vector3(-0.35, 1.55, 1.80),
+        lookAt: new THREE.Vector3(-0.88, 1.25, 0.45)
+      },
+      {
+        progress: 0.55,
+        tag: "Station II • Lady Evangeline Marrow",
+        title: "Mourning Lace & Obsidian Tinctures",
+        desc: "Lady Evangeline at her carved mahogany drafting desk blending alchemical bone-ash inks amongst amber apothecary glassware.",
+        pos: new THREE.Vector3(0.25, 1.50, 0.20),
+        lookAt: new THREE.Vector3(1.18, 1.10, -0.72)
+      },
+      {
+        progress: 0.75,
+        tag: "Station III • Central Nave under Chandelier",
+        title: "The Vaulted Timber Sanctuary",
+        desc: "Gliding beneath the 7 candle flames of the gothic chandelier towards the luminous stained-glass rose window.",
+        pos: new THREE.Vector3(0.00, 1.55, -1.20),
+        lookAt: new THREE.Vector3(0.00, 1.10, -3.45)
+      },
+      {
+        progress: 1.00,
+        tag: "Station IV • Sacred Illuminated Grimoire (Held)",
+        title: "The Sacred 1888 Inscription Folio",
+        desc: "Camera locked and holding upon the illuminated grimoire resting upon the sanctum altar under sacred candlelight.",
+        pos: GRIMOIRE_POS.clone(),
+        lookAt: GRIMOIRE_LOOKAT.clone()
+      }
+    ];
+
+    const camPosCurve = new THREE.CatmullRomCurve3(waypoints.map(w => w.pos));
+    const camLookCurve = new THREE.CatmullRomCurve3(waypoints.map(w => w.lookAt));
+
+    let currentProgress = 0.0;
+    let targetProgress = 0.0;
+    let isPlayingTour = false;
+    let isFreeCam = false;
+    let tourSpeed = 0.022; // Smooth glide
+
+    // UI Elements
+    const btnCamMode = document.getElementById("btn-camera-mode");
+    const camModeIcon = document.getElementById("cam-mode-icon");
+    const camModeText = document.getElementById("cam-mode-text");
+    const btnPlayPause = document.getElementById("btn-play-pause");
+    const btnResetCam = document.getElementById("btn-reset-cam");
+    const btnHoldGrimoire = document.getElementById("btn-hold-grimoire");
+    const btnLightingToggle = document.getElementById("btn-lighting-toggle");
+    const lightModeIcon = document.getElementById("light-mode-icon");
+    const lightModeText = document.getElementById("light-mode-text");
+
+    const timelineTrack = document.getElementById("timeline-track");
+    const timelineFill = document.getElementById("timeline-fill");
+    const timelineScrubber = document.getElementById("timeline-scrubber");
+    const timelineVal = document.getElementById("timeline-val");
+    const hudTag = document.getElementById("hud-tag");
+    const hudTitle = document.getElementById("hud-title");
+    const hudDesc = document.getElementById("hud-desc");
+    const wpPills = document.querySelectorAll(".wp-pill");
+
+    function setCameraProgress(p) {
+      targetProgress = THREE.MathUtils.clamp(p, 0.0, 1.0);
+    }
+
+    // Waypoint pill clicks
+    wpPills.forEach(pill => {
+      pill.addEventListener("click", () => {
+        if (isFreeCam) toggleCameraMode(false);
+        const p = parseFloat(pill.getAttribute("data-progress"));
+        setCameraProgress(p);
+      });
+    });
+
+    // Reset to Screenshot 014740 button
+    btnResetCam.addEventListener("click", () => {
+      if (isFreeCam) toggleCameraMode(false);
+      isPlayingTour = false;
+      btnPlayPause.textContent = "▶";
+      setCameraProgress(0.0);
+    });
+
+    // Hold on Grimoire button
+    btnHoldGrimoire.addEventListener("click", () => {
+      if (isFreeCam) toggleCameraMode(false);
+      isPlayingTour = false;
+      btnPlayPause.textContent = "▶";
+      setCameraProgress(1.0);
+    });
+
+    // Timeline scrubber drag
+    let isDraggingTimeline = false;
+    function handleTimelineEvent(e) {
+      const rect = timelineTrack.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const ratio = THREE.MathUtils.clamp((clientX - rect.left) / rect.width, 0.0, 1.0);
+      setCameraProgress(ratio);
+    }
+
+    timelineTrack.addEventListener("mousedown", (e) => {
+      isDraggingTimeline = true;
+      if (isFreeCam) toggleCameraMode(false);
+      handleTimelineEvent(e);
+    });
+    window.addEventListener("mousemove", (e) => {
+      if (isDraggingTimeline) handleTimelineEvent(e);
+    });
+    window.addEventListener("mouseup", () => { isDraggingTimeline = false; });
+
+    timelineTrack.addEventListener("touchstart", (e) => {
+      isDraggingTimeline = true;
+      if (isFreeCam) toggleCameraMode(false);
+      handleTimelineEvent(e);
+    }, { passive: true });
+    window.addEventListener("touchmove", (e) => {
+      if (isDraggingTimeline) handleTimelineEvent(e);
+    }, { passive: true });
+    window.addEventListener("touchend", () => { isDraggingTimeline = false; });
+
+    // Play / Pause Tour
+    btnPlayPause.addEventListener("click", () => {
+      if (isFreeCam) toggleCameraMode(false);
+      isPlayingTour = !isPlayingTour;
+      btnPlayPause.textContent = isPlayingTour ? "⏸" : "▶";
+      if (isPlayingTour && targetProgress >= 0.999) {
+        targetProgress = 0.0;
+        currentProgress = 0.0;
+      }
+    });
+
+    // Camera Mode Toggle (Tour vs Free Orbit)
+    function toggleCameraMode(forceFree) {
+      isFreeCam = (forceFree !== undefined) ? forceFree : !isFreeCam;
+      controls.enabled = isFreeCam;
+      if (isFreeCam) {
+        isPlayingTour = false;
+        btnPlayPause.textContent = "▶";
+        camModeIcon.textContent = "🌐";
+        camModeText.textContent = "Orbit Mode";
+        btnCamMode.classList.remove("active");
+      } else {
+        camModeIcon.textContent = "🎥";
+        camModeText.textContent = "Tour Mode";
+        btnCamMode.classList.add("active");
+      }
+    }
+    btnCamMode.addEventListener("click", () => toggleCameraMode());
+
+    // Outliner Selection and Click-to-Focus
+    const outlinerItems = document.querySelectorAll(".outliner-item");
+    outlinerItems.forEach(item => {
+      item.addEventListener("click", () => {
+        outlinerItems.forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+
+        const name = item.getAttribute("data-name");
+        if (name === "splat") {
+          setCameraProgress(0.0);
+        } else if (name === "Victorian Grimoire.glb") {
+          setCameraProgress(1.0);
+        } else if (loadedMeshesMap.has(name)) {
+          const targetMesh = loadedMeshesMap.get(name);
+          const worldPos = new THREE.Vector3();
+          targetMesh.getWorldPosition(worldPos);
+
+          if (isFreeCam) {
+            camera.lookAt(worldPos);
+          } else {
+            // Find closest progress along spline or adjust camera
+            if (name.includes("Lord_Archibald") || name.includes("03_Chaise_Lounge_Client.glb")) {
+              setCameraProgress(0.30);
+            } else if (name.includes("Lady_Evangeline") || name.includes("Writing Desk") || name.includes("Apothecary")) {
+              setCameraProgress(0.55);
+            } else if (name.includes("Chandelier")) {
+              setCameraProgress(0.75);
+            } else {
+              setCameraProgress(1.0);
+            }
+          }
+        }
+      });
+    });
+
+    // Atmosphere Controls Sliders
+    let lightingEnabled = true;
+    const sliderRedTint = document.getElementById("slider-red-tint");
+    const sliderFlicker = document.getElementById("slider-flicker");
+    const sliderFog = document.getElementById("slider-fog");
+    const sliderExposure = document.getElementById("slider-exposure");
+
+    sliderRedTint.addEventListener("input", (e) => {
+      const v = e.target.value / 100;
+      document.getElementById("val-red-tint").textContent = `${e.target.value}%`;
+      ambientLight.color.setRGB(0.16 * v, 0.02 * v, 0.04 * v);
+      bloodRedRake.intensity = 2.5 * v;
+      altarRuby.intensity = 3.5 * v;
+    });
+
+    sliderExposure.addEventListener("input", (e) => {
+      const v = e.target.value / 100;
+      document.getElementById("val-exposure").textContent = v.toFixed(2);
+      renderer.toneMappingExposure = v;
+    });
+
+    sliderFog.addEventListener("input", (e) => {
+      const v = e.target.value / 100;
+      document.getElementById("val-fog").textContent = `${e.target.value}%`;
+      volumetricFogGroup.visible = (v > 0.05);
+      volumetricFogGroup.traverse(child => {
+        if (child.material) {
+          if (child.material.opacity !== undefined) child.material.opacity = Math.min(0.8, 0.35 * v);
+        }
+      });
+    });
+
+    btnLightingToggle.addEventListener("click", () => {
+      lightingEnabled = !lightingEnabled;
+      lightingGroup.visible = lightingEnabled;
+      volumetricFogGroup.visible = lightingEnabled;
+      btnLightingToggle.classList.toggle("active", lightingEnabled);
+      lightModeIcon.textContent = lightingEnabled ? "🩸" : "💡";
+      lightModeText.textContent = lightingEnabled ? "Gothic Light" : "Unlit / Albedo";
+      renderer.toneMappingExposure = lightingEnabled ? (sliderExposure.value / 100) : 1.0;
+    });
+
+    function updateHud(p) {
+      const pct = Math.round(p * 100);
+      timelineFill.style.width = `${pct}%`;
+      timelineScrubber.style.left = `${pct}%`;
+      timelineVal.textContent = `${pct}%`;
+
+      // Active pill
+      let activeIdx = 0;
+      if (p < 0.20) activeIdx = 0;
+      else if (p < 0.45) activeIdx = 1;
+      else if (p < 0.68) activeIdx = 2;
+      else if (p < 0.90) activeIdx = 3;
+      else activeIdx = 4;
+
+      wpPills.forEach((pill, idx) => {
+        pill.classList.toggle("active", idx === activeIdx);
+      });
+
+      const curWp = waypoints[activeIdx];
+      hudTag.textContent = curWp.tag;
+      hudTitle.textContent = curWp.title;
+      hudDesc.textContent = curWp.desc;
+    }
+
+    // 8. ANIMATION LOOP
+    let lastTime = performance.now();
+
+    renderer.setAnimationLoop((time) => {
+      const now = performance.now();
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      // 1. Chandelier Candle Flames & Independent Flicker
+      if (lightingEnabled) {
+        const tSec = now * 0.001;
+        const flickerMult = sliderFlicker.value / 100;
+
+        chandelierCandles.forEach((c) => {
+          const t = tSec * c.swaySpeed + c.phase;
+          const flicker = (Math.sin(t * 1.8) * 0.22 +
+                           Math.sin(t * 4.3) * 0.14 +
+                           Math.sin(t * 9.7) * 0.08 +
+                           (Math.random() - 0.5) * 0.10) * flickerMult;
+
+          c.light.intensity = Math.max(0.35, c.baseIntensity + flicker);
+
+          // Flame teardrop swaying
+          c.flameContainer.scale.y = 1.0 + 0.24 * Math.sin(t * 3.1) * flickerMult;
+          c.flameContainer.scale.x = 1.0 + 0.12 * Math.cos(t * 2.3) * flickerMult;
+          c.flameContainer.rotation.z = 0.08 * Math.sin(t * 2.0);
+
+          // Halo breathing
+          c.halo.scale.setScalar(0.38 + 0.09 * flicker);
+          c.halo.material.opacity = 0.70 + 0.25 * Math.sin(t * 2.6);
+        });
+
+        // Gaslights station flicker
+        gaslights.forEach((gl, idx) => {
+          const noise = (Math.sin(tSec * 4.2 + idx * 2.1) * 0.35 +
+                         Math.sin(tSec * 9.8 + idx * 5.4) * 0.20 +
+                         (Math.random() - 0.5) * 0.15) * flickerMult;
+          gl.light.intensity = Math.max(0.5, gl.baseIntensity + noise);
+        });
+
+        // Volumetric Ground Fog crawling shader
+        groundFogShader.uniforms.uTime.value = tSec;
+
+        // Ground mist puffs drift
+        mistPuffs.forEach((p) => {
+          p.mesh.rotation.z += p.rotSpeed * dt;
+          p.mesh.position.x = p.origX + Math.sin(tSec * p.speed + p.phase) * 0.35;
+          p.mesh.position.z = p.origZ + Math.cos(tSec * p.speed * 0.8 + p.phase) * 0.30;
+          p.mesh.position.y = p.baseY + Math.sin(tSec * 0.6 + p.phase) * 0.025;
+        });
+      }
+
+      // 2. Dust particles drift
+      const posAttr = dustGeo.attributes.position;
+      for (let i = 1; i < dustCount * 3; i += 3) {
+        posAttr.array[i] += Math.sin(now * 0.001 + i) * 0.0015;
+        if (posAttr.array[i] > 5) posAttr.array[i] = 0;
+      }
+      posAttr.needsUpdate = true;
+
+      // 3. Camera Motion & Grimoire Hold Sequence
+      if (!isFreeCam) {
+        if (isPlayingTour) {
+          if (targetProgress < 1.0) {
+            targetProgress += tourSpeed * dt;
+            if (targetProgress >= 1.0) {
+              targetProgress = 1.0;
+              // HOLD CAMERA ON THE GRIMOIRE AT THE END OF THE CAMERA TRACK SEQUENCE
+              isPlayingTour = false;
+              btnPlayPause.textContent = "▶";
+              btnPlayPause.title = "Held on Sacred Grimoire";
+            }
+          }
+        }
+
+        // Smooth exponential lerp
+        currentProgress += (targetProgress - currentProgress) * (1.0 - Math.exp(-dt * 6.5));
+
+        // Evaluate positions from 3D spline
+        const clampedP = THREE.MathUtils.clamp(currentProgress, 0.0001, 0.9999);
+        const targetPos = camPosCurve.getPointAt(clampedP);
+        const targetLookAt = camLookCurve.getPointAt(clampedP);
+
+        // Subtle organic breathing drift when held on the Grimoire
+        if (currentProgress > 0.94) {
+          const breathe = Math.sin(now * 0.0014) * 0.012;
+          targetPos.y += breathe;
+          targetLookAt.y += breathe * 0.4;
+        }
+
+        camera.position.copy(targetPos);
+        camera.lookAt(targetLookAt);
+
+        updateHud(currentProgress);
+      } else {
+        controls.update(localFrame, camera);
+      }
+
+      renderer.render(scene, camera);
+    });
+
+    // Window Resize
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

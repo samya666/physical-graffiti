@@ -1,0 +1,1093 @@
+/* ============================================================
+   PHYSICAL GRAFFITI — VICTORIAN GOTHIC TATTOO ATELIER
+   Design System & Stylistic Tokens
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display+SC:wght@700;900&family=UnifrakturMaguntia&display=swap');
+
+:root {
+  --bg-deep: #070709;
+  --bg-parlour: #0d0c11;
+  --bg-card: #141219;
+  --border-gold: #c5a059;
+  --border-gold-glow: rgba(197, 160, 89, 0.4);
+  --gold-highlight: #f3d790;
+  --oxblood: #500f19;
+  --oxblood-light: #7c1a29;
+  --bone: #eae1d2;
+  --bone-dim: #b8ac9a;
+  --font-gothic: 'Cinzel Decorative', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --font-accent: 'Playfair Display SC', serif;
+  --font-antique: 'UnifrakturMaguntia', cursive;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-deep);
+  color: var(--bone);
+  font-family: var(--font-body);
+}
+
+body {
+  overflow-x: hidden;
+  background: radial-gradient(circle at 50% 20%, #15111b 0%, #070709 85%);
+  cursor: default;
+}
+
+/* Custom Needle Cursor */
+#custom-cursor {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--border-gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease-out, background 0.15s ease;
+  box-shadow: 0 0 10px rgba(197, 160, 89, 0.6);
+}
+
+#custom-cursor.clicking {
+  transform: translate(-50%, -50%) scale(2.2);
+  background: rgba(197, 160, 89, 0.4);
+  border-color: var(--gold-highlight);
+}
+
+/* Canvas Background */
+#atmosphere-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Vignette overlay */
+.vignette-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.85) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Navigation */
+.sanctuary-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+  background: linear-gradient(to bottom, rgba(7, 7, 9, 0.95), rgba(7, 7, 9, 0));
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+  transition: all 0.3s ease;
+}
+
+.brand-mark {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.brand-title {
+  font-family: var(--font-gothic);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  color: var(--gold-highlight);
+  text-shadow: 0 0 12px rgba(243, 215, 144, 0.4);
+}
+
+.brand-subtitle {
+  font-family: var(--font-body);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: var(--bone-dim);
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-link {
+  font-family: var(--font-accent);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bone);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  position: relative;
+  padding: 4px 0;
+}
+
+.nav-link:hover {
+  color: var(--gold-highlight);
+  text-shadow: 0 0 8px rgba(243, 215, 144, 0.6);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--border-gold);
+  transition: all 0.25s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-cta {
+  background: linear-gradient(135deg, var(--oxblood), var(--oxblood-light));
+  color: var(--bone);
+  border: 1px solid var(--border-gold);
+  padding: 9px 22px;
+  border-radius: 4px;
+  font-family: var(--font-accent);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(80, 15, 25, 0.5);
+}
+
+.nav-cta:hover {
+  background: var(--oxblood-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(197, 160, 89, 0.3);
+  border-color: var(--gold-highlight);
+}
+
+/* Sound Toggle Button */
+.audio-toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  color: var(--border-gold);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.audio-toggle-btn:hover {
+  border-color: var(--gold-highlight);
+  box-shadow: 0 0 10px rgba(243, 215, 144, 0.4);
+}
+
+/* Main Container */
+.page-wrapper {
+  position: relative;
+  z-index: 10;
+}
+
+/* Section Common */
+.victorian-section {
+  position: relative;
+  padding: 120px 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-accent);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--border-gold);
+  margin-bottom: 12px;
+}
+
+.section-tag::before, .section-tag::after {
+  content: '♦';
+  font-size: 9px;
+  color: var(--border-gold);
+}
+
+.section-heading {
+  font-family: var(--font-gothic);
+  font-size: clamp(32px, 4.5vw, 56px);
+  color: var(--bone);
+  line-height: 1.15;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.section-lead {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--bone-dim);
+  max-width: 680px;
+  font-style: italic;
+}
+
+/* Ornate Victorian Divider */
+.ornate-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px auto;
+  width: 100%;
+  max-width: 480px;
+  gap: 16px;
+}
+
+.ornate-line {
+  flex-grow: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+}
+
+.ornate-icon {
+  color: var(--border-gold);
+  font-size: 18px;
+}
+
+/* ============================================================
+   3D SCROLL-DRIVEN HERO CONTAINER & CAMERA TRACKING
+   ============================================================ */
+#hero-3d-wrapper {
+  position: relative;
+  width: 100%;
+  height: 380vh; /* Pinned 3D camera travel distance */
+  z-index: 5;
+}
+
+.hero-sticky-frame {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #060508;
+}
+
+#three-hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 3D Camera Progress HUD */
+.camera-progress-track {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 3px;
+  background: rgba(197, 160, 89, 0.2);
+  border-radius: 9999px;
+  overflow: hidden;
+  z-index: 20;
+}
+
+#camera-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--border-gold), var(--gold-highlight));
+  box-shadow: 0 0 10px rgba(243, 215, 144, 0.8);
+  transition: width 0.1s ease-out;
+}
+
+.scroll-hint-pill {
+  position: absolute;
+  bottom: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-accent);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-highlight);
+  background: rgba(7, 7, 9, 0.8);
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  backdrop-filter: blur(8px);
+  z-index: 20;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+.scroll-hint-arrow {
+  animation: bounceDown 1.6s infinite ease-in-out;
+}
+
+/* Interactive Camera Waypoint Navigation */
+.camera-waypoint-nav {
+  position: absolute;
+  top: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 25;
+  background: rgba(7, 7, 9, 0.78);
+  padding: 6px 14px;
+  border-radius: 30px;
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+}
+
+.waypoint-pill {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--bone-dim);
+  font-family: var(--font-accent);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.waypoint-pill:hover {
+  color: var(--gold-highlight);
+  border-color: rgba(197, 160, 89, 0.35);
+  background: rgba(197, 160, 89, 0.1);
+}
+
+.waypoint-pill.active {
+  color: #070709;
+  background: linear-gradient(135deg, var(--gold-highlight), var(--border-gold));
+  border-color: var(--gold-highlight);
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(243, 215, 144, 0.5);
+}
+
+/* HUD Checkpoint Cards */
+.hud-checkpoint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  text-align: center;
+  max-width: 860px;
+  width: 90%;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(6px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+  z-index: 15;
+}
+
+.hud-checkpoint.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  filter: blur(0);
+  pointer-events: all;
+}
+
+.hud-tag {
+  display: inline-block;
+  font-family: var(--font-accent);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--border-gold);
+  margin-bottom: 12px;
+}
+
+.hud-title {
+  font-family: var(--font-gothic);
+  font-size: clamp(34px, 5.5vw, 68px);
+  color: var(--gold-highlight);
+  line-height: 1.1;
+  margin-bottom: 16px;
+  text-shadow: 0 0 30px rgba(197, 160, 89, 0.4), 0 4px 25px rgba(0,0,0,0.95);
+}
+
+.hud-desc {
+  font-family: var(--font-body);
+  font-size: clamp(16px, 2vw, 22px);
+  font-style: italic;
+  color: var(--bone);
+  max-width: 700px;
+  margin: 0 auto 28px auto;
+  line-height: 1.6;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+
+/* HERO SECTION (Fallback / Inner) */
+.hero-sanctuary {
+  display: none;
+}
+
+.hero-parlour-backdrop {
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/images/hero_parlour.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.28) contrast(1.2);
+  transform: scale(1.05);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.hero-content {
+  max-width: 900px;
+  z-index: 5;
+}
+
+.hero-crest {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px auto;
+  filter: drop-shadow(0 0 15px rgba(243, 215, 144, 0.5));
+}
+
+.hero-headline {
+  font-family: var(--font-gothic);
+  font-size: clamp(42px, 6.8vw, 84px);
+  color: var(--gold-highlight);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+  line-height: 1.05;
+  text-shadow: 0 0 30px rgba(197, 160, 89, 0.4), 0 5px 25px rgba(0,0,0,0.9);
+}
+
+.hero-subhead {
+  font-family: var(--font-body);
+  font-size: clamp(18px, 2.2vw, 24px);
+  font-style: italic;
+  color: var(--bone);
+  max-width: 720px;
+  margin: 0 auto 36px auto;
+  line-height: 1.6;
+}
+
+.hero-btn-row {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--border-gold), #8a6d3b);
+  color: #070709;
+  border: 1px solid var(--gold-highlight);
+  padding: 16px 36px;
+  font-family: var(--font-accent);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 24px rgba(197, 160, 89, 0.4);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--gold-highlight);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 32px rgba(243, 215, 144, 0.6);
+}
+
+.btn-secondary {
+  background: rgba(13, 12, 17, 0.8);
+  color: var(--bone);
+  border: 1px solid rgba(197, 160, 89, 0.4);
+  padding: 16px 36px;
+  font-family: var(--font-accent);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.btn-secondary:hover {
+  background: rgba(80, 15, 25, 0.4);
+  border-color: var(--border-gold);
+  color: var(--gold-highlight);
+  transform: translateY(-3px);
+}
+
+/* SECTION: THE PARLOUR EXPERIENCE & SCROLL REVEAL */
+.experience-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.experience-frame {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(197, 160, 89, 0.3);
+}
+
+.experience-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.experience-frame:hover img {
+  transform: scale(1.04);
+}
+
+.experience-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 12px solid transparent;
+  border-image: linear-gradient(135deg, var(--border-gold), transparent, var(--border-gold)) 12;
+  pointer-events: none;
+}
+
+.experience-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.experience-feature {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px;
+  background: rgba(20, 18, 25, 0.6);
+  border-left: 2px solid var(--border-gold);
+  border-radius: 0 8px 8px 0;
+  transition: background 0.3s ease;
+}
+
+.experience-feature:hover {
+  background: rgba(80, 15, 25, 0.35);
+}
+
+.feature-icon {
+  font-size: 24px;
+  color: var(--border-gold);
+}
+
+.feature-title {
+  font-family: var(--font-accent);
+  font-size: 16px;
+  color: var(--gold-highlight);
+  margin-bottom: 4px;
+}
+
+.feature-desc {
+  font-size: 14px;
+  color: var(--bone-dim);
+  line-height: 1.55;
+}
+
+/* SECTION: MASTER SKELETAL ARTISTS */
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 60px;
+}
+
+.artist-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.artist-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-gold);
+  box-shadow: 0 24px 60px rgba(197, 160, 89, 0.2);
+}
+
+.artist-img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.artist-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.artist-card:hover .artist-img-wrapper img {
+  transform: scale(1.06);
+}
+
+.artist-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(7, 7, 9, 0.85);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-highlight);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--font-accent);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.artist-info {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.artist-name {
+  font-family: var(--font-gothic);
+  font-size: 21px;
+  color: var(--bone);
+  margin-bottom: 6px;
+}
+
+.artist-specialty {
+  font-family: var(--font-accent);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--border-gold);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.artist-bio {
+  font-size: 14px;
+  color: var(--bone-dim);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.artist-couture {
+  background: rgba(7, 7, 9, 0.7);
+  padding: 10px 14px;
+  border-radius: 4px;
+  border-left: 2px solid var(--oxblood-light);
+  font-size: 12px;
+  color: #dfb76c;
+  margin-bottom: 20px;
+}
+
+.artist-book-btn {
+  background: transparent;
+  color: var(--gold-highlight);
+  border: 1px solid var(--border-gold);
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+  font-family: var(--font-accent);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.artist-book-btn:hover {
+  background: var(--oxblood);
+  color: #ffffff;
+  border-color: var(--gold-highlight);
+}
+
+/* SECTION: THE GRIMOIRE (TATTOO FLASH GALLERY) */
+.grimoire-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background: rgba(20, 18, 25, 0.8);
+  color: var(--bone);
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  padding: 10px 20px;
+  font-family: var(--font-accent);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active, .tab-btn:hover {
+  background: var(--border-gold);
+  color: #070709;
+  border-color: var(--gold-highlight);
+  font-weight: 700;
+}
+
+.grimoire-showcase {
+  margin-top: 48px;
+  background: #100e14;
+  border: 1px solid rgba(197, 160, 89, 0.4);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.flash-sheet-container {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  cursor: zoom-in;
+  position: relative;
+}
+
+.flash-sheet-container img {
+  width: 100%;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.flash-sheet-container:hover img {
+  transform: scale(1.03);
+}
+
+.flash-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.flash-title {
+  font-family: var(--font-gothic);
+  font-size: 26px;
+  color: var(--gold-highlight);
+}
+
+.flash-description {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--bone-dim);
+}
+
+.flash-specs-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid rgba(197, 160, 89, 0.2);
+  border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+  padding: 16px 0;
+}
+
+.flash-specs-list li {
+  font-size: 13.5px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--bone);
+}
+
+.flash-specs-list li span:first-child {
+  color: var(--border-gold);
+  font-family: var(--font-accent);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+}
+
+/* SECTION: CARTOGRAPHY & SANCTUM */
+.sanctum-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.cartography-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-gold);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+}
+
+.cartography-card img {
+  width: 100%;
+  display: block;
+}
+
+.sanctum-info {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sanctum-block {
+  background: var(--bg-card);
+  padding: 20px 24px;
+  border-radius: 6px;
+  border-left: 3px solid var(--border-gold);
+}
+
+.sanctum-label {
+  font-family: var(--font-accent);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-highlight);
+  margin-bottom: 6px;
+}
+
+.sanctum-value {
+  font-size: 15px;
+  color: var(--bone);
+  line-height: 1.5;
+}
+
+/* BOOKING SCRIPTORIUM MODAL */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 7, 9, 0.88);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.scriptorium-modal {
+  background: radial-gradient(circle at center, #1b1622, #0d0c11);
+  border: 2px solid var(--border-gold);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 35px rgba(197, 160, 89, 0.3);
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-backdrop.active .scriptorium-modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: var(--border-gold);
+  font-size: 26px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close-btn:hover {
+  color: var(--gold-highlight);
+}
+
+.scriptorium-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.scriptorium-title {
+  font-family: var(--font-gothic);
+  font-size: 26px;
+  color: var(--gold-highlight);
+  margin-bottom: 8px;
+}
+
+.scriptorium-desc {
+  font-size: 14px;
+  color: var(--bone-dim);
+  font-style: italic;
+}
+
+.scriptorium-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-family: var(--font-accent);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--border-gold);
+}
+
+.form-input, .form-select, .form-textarea {
+  background: #09080c;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  border-radius: 4px;
+  padding: 12px 14px;
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--gold-highlight);
+  box-shadow: 0 0 10px rgba(243, 215, 144, 0.25);
+}
+
+.form-submit-btn {
+  background: linear-gradient(135deg, var(--oxblood), var(--oxblood-light));
+  color: var(--gold-highlight);
+  border: 1px solid var(--border-gold);
+  padding: 16px;
+  border-radius: 4px;
+  font-family: var(--font-accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  box-shadow: 0 6px 20px rgba(80, 15, 25, 0.6);
+}
+
+.form-submit-btn:hover {
+  background: var(--oxblood-light);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(197, 160, 89, 0.3);
+}
+
+/* FOOTER */
+.sanctuary-footer {
+  border-top: 1px solid rgba(197, 160, 89, 0.2);
+  background: #050507;
+  padding: 60px 48px 30px 48px;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-brand {
+  font-family: var(--font-gothic);
+  font-size: 24px;
+  color: var(--gold-highlight);
+}
+
+.footer-latin {
+  font-style: italic;
+  color: var(--bone-dim);
+  font-size: 15px;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: #666;
+  letter-spacing: 0.1em;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .artists-grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .experience-grid, .sanctum-grid, .grimoire-showcase {
+    grid-template-columns: 1fr;
+  }
+  .nav-links {
+    display: none;
+  }
+}

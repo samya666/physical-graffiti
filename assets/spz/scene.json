@@ -1,0 +1,160 @@
+{
+  "splats": [
+    {
+      "filename": "project-attic-library-of-ancient-lore.ply",
+      "transform": {
+        "translation": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "quaternion": [0, 0, 0, 1],
+        "scale": 1.0
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "01_Lord_Archibald.glb",
+      "filename": "models/01_Lord_Archibald.glb",
+      "transform": {
+        "translation": [-0.88, 0.95, 0.45],
+        "rotation": [0, 14.0, 0],
+        "scale": [0.95, 0.95, 0.95]
+      }
+    },
+    {
+      "name": "03_Chaise_Lounge_Client.glb",
+      "filename": "models/03_Chaise_Lounge_Client.glb",
+      "transform": {
+        "translation": [-1.45, 0.58, 0.85],
+        "rotation": [0, 24.0, 0],
+        "scale": [0.95, 0.95, 0.95]
+      }
+    },
+    {
+      "name": "04_Lady_Evangeline.glb",
+      "filename": "models/04_Lady_Evangeline.glb",
+      "transform": {
+        "translation": [1.18, 0.92, -0.72],
+        "rotation": [0, -125.0, 0],
+        "scale": [0.92, 0.92, 0.92]
+      }
+    },
+    {
+      "name": "Anatomical Wall Chart.glb",
+      "filename": "models/Anatomical Wall Chart.glb",
+      "transform": {
+        "translation": [2.42, 2.05, -0.45],
+        "rotation": [0, -88.0, 0],
+        "scale": [0.55, 0.55, 0.55]
+      }
+    },
+    {
+      "name": "Victorian Apothecary Set.glb",
+      "filename": "models/Victorian Apothecary Set.glb",
+      "transform": {
+        "translation": [1.58, 0.86, -0.72],
+        "rotation": [0, -15.0, 0],
+        "scale": [0.20, 0.20, 0.20]
+      }
+    },
+    {
+      "name": "Victorian Brass Tattoo Machine.glb",
+      "filename": "models/Victorian Brass Tattoo Machine.glb",
+      "transform": {
+        "translation": [0.24, 0.86, -3.35],
+        "rotation": [0, 20.0, 0],
+        "scale": [0.18, 0.18, 0.18]
+      }
+    },
+    {
+      "name": "Victorian Gothic Chandelier.glb",
+      "filename": "models/Victorian Gothic Chandelier.glb",
+      "transform": {
+        "translation": [0.00, 3.45, -1.60],
+        "rotation": [0, 0, 0],
+        "scale": [0.68, 0.68, 0.68]
+      }
+    },
+    {
+      "name": "Victorian Grimoire.glb",
+      "filename": "models/Victorian Grimoire.glb",
+      "transform": {
+        "translation": [0.00, 0.95, -3.45],
+        "rotation": [0, 0, 0],
+        "scale": [0.35, 0.35, 0.35]
+      }
+    },
+    {
+      "name": "Victorian Writing Desk.glb",
+      "filename": "models/Victorian Writing Desk.glb",
+      "transform": {
+        "translation": [1.58, 0.40, -0.72],
+        "rotation": [0, -102.0, 0],
+        "scale": [0.40, 0.40, 0.40]
+      }
+    },
+    {
+      "name": "03_Chaise_Lounge_Client.glb",
+      "filename": "models/03_Chaise_Lounge_Client.glb",
+      "transform": {
+        "translation": [-0.65, 0.48, -3.20],
+        "rotation": [0, 65.0, 0],
+        "scale": [0.75, 0.75, 0.75]
+      }
+    },
+    {
+      "name": "Victorian Skeleton Gentleman.glb",
+      "filename": "models/Victorian Skeleton Gentleman.glb",
+      "transform": {
+        "translation": [-0.42, 0.92, -3.45],
+        "rotation": [0, 15.0, 0],
+        "scale": [0.92, 0.92, 0.92]
+      }
+    }
+  ],
+  "camera": {
+    "start": {
+      "name": "Screenshot 014740 Pose",
+      "position": [0.00, 1.62, 3.65],
+      "target": [0.00, 1.35, -3.20],
+      "fov": 58
+    },
+    "waypoints": [
+      {
+        "name": "Station 0 • Grand Nave Establishing (Screenshot 014740)",
+        "progress": 0.0,
+        "position": [0.00, 1.62, 3.65],
+        "target": [0.00, 1.35, -3.20]
+      },
+      {
+        "name": "Station I • Lord Archibald & Armchair Patron",
+        "progress": 0.30,
+        "position": [-0.35, 1.55, 1.80],
+        "target": [-0.88, 1.25, 0.45]
+      },
+      {
+        "name": "Station II • Lady Evangeline & Apothecary Desk",
+        "progress": 0.55,
+        "position": [0.25, 1.50, 0.20],
+        "target": [1.18, 1.10, -0.72]
+      },
+      {
+        "name": "Station III • Central Nave under Chandelier",
+        "progress": 0.75,
+        "position": [0.00, 1.55, -1.20],
+        "target": [0.00, 1.10, -3.45]
+      },
+      {
+        "name": "Station IV • Sacred Illuminated Grimoire (Held)",
+        "progress": 1.0,
+        "position": [0.00, 1.25, -2.60],
+        "target": [0.00, 0.95, -3.45]
+      }
+    ]
+  },
+  "metadata": {
+    "title": "Project - Attic Library of Ancient Lore",
+    "exportTimestamp": "2026-09-25T02:20:00.000Z",
+    "spzExportVersion": 2,
+    "worldlabs_project_id": "84dc79b6-9165-476f-bcb9-c3f36f7389ef"
+  }
+}

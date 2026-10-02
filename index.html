@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physical Graffiti — Victorian Gothic Tattoo Atelier</title>
+  <meta name="description" content="Physical Graffiti: An opulent Victorian Gothic tattoo parlour where haute-couture skeletal masters inscribe eternal copperplate art into bone and flesh.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💀</text></svg>">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- Custom Brass Needle Cursor -->
+  <div id="custom-cursor"></div>
+
+  <!-- Atmospheric Canvas (Drifting Gaslight Embers & Incense Dust) -->
+  <canvas id="atmosphere-canvas"></canvas>
+  <div class="vignette-overlay"></div>
+
+  <!-- SANCTUARY NAVIGATION -->
+  <header class="sanctuary-nav">
+    <a href="#" class="brand-mark">
+      <span class="brand-title">PHYSICAL GRAFFITI</span>
+      <span class="brand-subtitle">Victorian Gothic Atelier • Est. 1888</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#atelier" class="nav-link">The Atelier</a></li>
+      <li><a href="#artists" class="nav-link">The Inkers</a></li>
+      <li><a href="#grimoire" class="nav-link">The Grimoire</a></li>
+      <li><a href="#sanctum" class="nav-link">Sanctum Map</a></li>
+    </ul>
+
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <a href="./assets/spz/index.html" target="_blank" class="nav-cta" style="background: rgba(74,4,4,0.8); border: 1px solid #d4af37; color: #ffd700; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 14px rgba(212,175,55,0.3);" title="Experience Real-Time 3D Gaussian Splatting (SPZ) with Cinematic Camera Motion">
+        <span>✨</span> <span>3DGS SPZ Atelier</span>
+      </a>
+      <button id="audio-toggle" class="audio-toggle-btn" title="Toggle Cathedral Ambience">🔇</button>
+      <button class="nav-cta open-scriptorium-btn">Commission Inscription</button>
+    </div>
+  </header>
+
+  <!-- WIP Prototype Badge -->
+  <div class="wip-banner" style="position: fixed; bottom: 20px; right: 20px; z-index: 99999; background: rgba(20, 15, 15, 0.88); border: 1px solid rgba(212, 175, 55, 0.6); color: #e6c875; padding: 8px 16px; border-radius: 20px; font-family: 'Cinzel', serif, sans-serif; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); backdrop-filter: blur(8px); pointer-events: none;">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #d4af37; box-shadow: 0 0 10px #d4af37;"></span>
+    <span>WIP Prototype • Experimental 3D Build</span>
+  </div>
+
+  <div class="page-wrapper">
+
+    <!-- 3D SCROLL-DRIVEN HERO TRACKING -->
+    <section id="hero-3d-wrapper">
+      <div class="hero-sticky-frame">
+        <canvas id="three-hero-canvas"></canvas>
+
+        <!-- Interactive Camera Waypoint Navigation -->
+        <div class="camera-waypoint-nav">
+          <button class="waypoint-pill active" data-target="0.0">01 • Foyer</button>
+          <button class="waypoint-pill" data-target="0.25">02 • Archibald</button>
+          <button class="waypoint-pill" data-target="0.50">03 • Evangeline</button>
+          <button class="waypoint-pill" data-target="0.75">04 • Atelier</button>
+          <button class="waypoint-pill" data-target="0.95">05 • Sanctum</button>
+        </div>
+
+        <!-- Scroll & Camera Progress HUD -->
+        <div class="scroll-hint-pill">
+          <span>Scroll to Track Camera Through Atelier</span>
+          <span class="scroll-hint-arrow">▼</span>
+        </div>
+        <div class="camera-progress-track">
+          <div id="camera-progress-fill"></div>
+        </div>
+
+        <!-- Checkpoint 1 (0.00 to 0.18) -->
+        <div class="hud-checkpoint active" data-start="0.0" data-end="0.18">
+          <span class="hud-tag">Haute Couture & Osseous Artistry</span>
+          <h1 class="hud-title">PHYSICAL GRAFFITI</h1>
+          <p class="hud-desc">"Where High Victorian Grandeur Meets the Immortal Needle • Est. 1888"</p>
+          <div class="hero-btn-row">
+            <a href="#atelier" class="btn-primary">Descend Into Atelier</a>
+            <button class="btn-secondary open-scriptorium-btn">Commission Inscription</button>
+          </div>
+        </div>
+
+        <!-- Checkpoint 2 (0.20 to 0.38) -->
+        <div class="hud-checkpoint" data-start="0.20" data-end="0.38">
+          <span class="hud-tag">Station I • Lord Archibald Graves</span>
+          <h2 class="hud-title">THE BESPOKE NEEDLE</h2>
+          <p class="hud-desc">Master skeletal inker in tailored emerald velvet frock coat & top hat inspecting antique brass rotary coils.</p>
+          <div class="hero-btn-row">
+            <a href="#artists" class="btn-secondary">Meet The Inkers</a>
+          </div>
+        </div>
+
+        <!-- Checkpoint 3 (0.40 to 0.58) -->
+        <div class="hud-checkpoint" data-start="0.40" data-end="0.58">
+          <span class="hud-tag">Station II • Lady Evangeline Marrow</span>
+          <h2 class="hud-title">MOURNING LACE & INK</h2>
+          <p class="hud-desc">Formulating artisanal bone-ash obsidian tinctures in Victorian mourning silk and antique jet-beaded corset.</p>
+          <div class="hero-btn-row">
+            <a href="#grimoire" class="btn-secondary">Inspect Her Flash</a>
+          </div>
+        </div>
+
+        <!-- Checkpoint 4 (0.60 to 0.78) -->
+        <div class="hud-checkpoint" data-start="0.60" data-end="0.78">
+          <span class="hud-tag">Station III • The Needle Chamber</span>
+          <h2 class="hud-title">AN OSSEOUS COMMISSION</h2>
+          <p class="hud-desc">An aristocratic skeletal patron in pinstripe tailoring reclined upon tufted oxblood leather under blue cathedral moonlight.</p>
+          <div class="hero-btn-row">
+            <button class="btn-primary open-scriptorium-btn">Reserve Your Session</button>
+          </div>
+        </div>
+
+        <!-- Checkpoint 5 (0.80 to 1.00) -->
+        <div class="hud-checkpoint" data-start="0.80" data-end="1.00">
+          <span class="hud-tag">Station IV • The Sanctum Altar</span>
+          <h2 class="hud-title">THE ILLUMINATED GRIMOIRE</h2>
+          <p class="hud-desc">Ancient 1888 leather-bound tattoo flash folio resting beneath the soaring stained-glass rose window and smoking brass censers.</p>
+          <div class="hero-btn-row">
+            <a href="#grimoire" class="btn-primary">Inspect The Grimoire</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 1: THE ATELIER & PARLOUR EXPERIENCE -->
+    <section id="atelier" class="victorian-section">
+      <div style="text-align: center;">
+        <span class="section-tag">The Subterranean Atelier</span>
+        <h2 class="section-heading">Victorian Grandeur & Bone Artistry</h2>
+        <p class="section-lead" style="margin: 0 auto;">
+          Hidden beneath gaslit cobblestones, Physical Graffiti welcomes distinguished patrons into an opulent parlour of dark mahogany wainscoting, cathedral glass, and tufted oxblood leather.
+        </p>
+      </div>
+
+      <div class="experience-grid">
+        <div class="experience-frame">
+          <img src="assets/images/session.jpg" alt="A fashionable skeletal client receiving a bespoke tattoo in the Victorian parlour">
+        </div>
+
+        <div class="experience-content">
+          <div class="experience-feature">
+            <span class="feature-icon">🕯️</span>
+            <div>
+              <h3 class="feature-title">Haute Couture & Dapper Artisans</h3>
+              <p class="feature-desc">Every master inker and discerning client honors the sartorial grace of the Victorian era — tailored frock coats, silk cravats, mourning lace corsets, and gold pocket watches.</p>
+            </div>
+          </div>
+
+          <div class="experience-feature">
+            <span class="feature-icon">✒️</span>
+            <div>
+              <h3 class="feature-title">Master Copperplate Etching</h3>
+              <p class="feature-desc">We eschew modern trends in favor of timeless 19th-century copperplate etchings, fine-line anatomical scrimshaw, and intricate baroque filigree.</p>
+            </div>
+          </div>
+
+          <div class="experience-feature">
+            <span class="feature-icon">🧪</span>
+            <div>
+              <h3 class="feature-title">Apothecary Pigments & Purity</h3>
+              <p class="feature-desc">Formulated in small batches from charcoal black obsidian and bone ash binders. Meticulously sterilized under gaslight lanterns for eternal preservation.</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 10px;">
+            <button class="nav-cta open-scriptorium-btn" style="padding: 12px 28px;">Reserve a Parlour Session</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornate-divider">
+      <div class="ornate-line"></div>
+      <span class="ornate-icon">♦</span>
+      <div class="ornate-line"></div>
+    </div>
+
+    <!-- SECTION 2: THE GRAND INKERS (MASTER SKELETAL ARTISTS) -->
+    <section id="artists" class="victorian-section">
+      <div style="text-align: center;">
+        <span class="section-tag">Resident Virtuosos</span>
+        <h2 class="section-heading">The Master Skeletal Inkers</h2>
+        <p class="section-lead" style="margin: 0 auto;">
+          Meet the sovereign artisans of Physical Graffiti — each a dapper legend of needlecraft and Victorian elegance.
+        </p>
+      </div>
+
+      <div class="artists-grid">
+        <!-- Artist 1 -->
+        <article class="artist-card">
+          <div class="artist-img-wrapper">
+            <img src="assets/images/artist_archibald.jpg" alt="Lord Archibald Graves">
+            <span class="artist-badge">Senior Inker</span>
+          </div>
+          <div class="artist-info">
+            <div>
+              <h3 class="artist-name">Lord Archibald Graves</h3>
+              <div class="artist-specialty">Fine-Line Copperplate & Etching</div>
+              <p class="artist-bio">Renowned throughout high society for micro-etched anatomical crosshatches, historical engravings, and medieval memento mori inscriptions.</p>
+              <div class="artist-couture">
+                <b>Attire:</b> Tailored velvet double-breasted frock coat, silk ascot with gold skull pin.
+              </div>
+            </div>
+            <button class="artist-book-btn open-scriptorium-btn" data-artist="archibald">Commission Archibald</button>
+          </div>
+        </article>
+
+        <!-- Artist 2 -->
+        <article class="artist-card">
+          <div class="artist-img-wrapper">
+            <img src="assets/images/artist_evangeline.jpg" alt="Lady Evangeline Marrow">
+            <span class="artist-badge">Atelier Sovereign</span>
+          </div>
+          <div class="artist-info">
+            <div>
+              <h3 class="artist-name">Lady Evangeline Marrow</h3>
+              <div class="artist-specialty">Dark Botanicals & Mourning Lace</div>
+              <p class="artist-bio">Crafts weeping briars, poisoned belladonna vines, anatomical hearts, and ethereal filigree lacework inspired by 19th-century funeral mourning art.</p>
+              <div class="artist-couture">
+                <b>Attire:</b> Midnight damask gown, mourning lace veil, antique jet bead collar.
+              </div>
+            </div>
+            <button class="artist-book-btn open-scriptorium-btn" data-artist="evangeline">Commission Evangeline</button>
+          </div>
+        </article>
+
+        <!-- Artist 3 -->
+        <article class="artist-card">
+          <div class="artist-img-wrapper">
+            <img src="assets/images/artist_viktor.jpg" alt="Baron Viktor Von Ossis">
+            <span class="artist-badge">Master Cryptographer</span>
+          </div>
+          <div class="artist-info">
+            <div>
+              <h3 class="artist-name">Baron Viktor Von Ossis</h3>
+              <div class="artist-specialty">Scrimshaw Heraldry & Blackwork</div>
+              <p class="artist-bio">A philosopher of dark geometry and gold-leaf bone carving. Specializes in massive backpieces, sacred geometry, and occult heraldic beasts.</p>
+              <div class="artist-couture">
+                <b>Attire:</b> Claret velvet smoking jacket, gold monocle, hand-carved scrimshaw skull.
+              </div>
+            </div>
+            <button class="artist-book-btn open-scriptorium-btn" data-artist="viktor">Commission Viktor</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="ornate-divider">
+      <div class="ornate-line"></div>
+      <span class="ornate-icon">☠</span>
+      <div class="ornate-line"></div>
+    </div>
+
+    <!-- SECTION 3: THE GRIMOIRE (TATTOO FLASH GALLERY) -->
+    <section id="grimoire" class="victorian-section">
+      <div style="text-align: center;">
+        <span class="section-tag">Archival Inscriptions</span>
+        <h2 class="section-heading">The Ink Grimoire (Est. 1888)</h2>
+        <p class="section-lead" style="margin: 0 auto;">
+          Original copperplate tattoo flash preserved on aged parchment. Click any chapter to inspect the placement and needlecraft.
+        </p>
+      </div>
+
+      <div class="grimoire-tabs">
+        <button class="tab-btn active" data-tab="memento-mori">Memento Mori</button>
+        <button class="tab-btn" data-tab="sacred-heart">Sacred Heart</button>
+        <button class="tab-btn" data-tab="tempus-fugit">Tempus Fugit</button>
+        <button class="tab-btn" data-tab="dark-heraldry">Dark Heraldry</button>
+      </div>
+
+      <div class="grimoire-showcase">
+        <div class="flash-sheet-container">
+          <img src="assets/images/flash_sheet.jpg" alt="Victorian Tattoo Flash Sheet - Physical Graffiti">
+        </div>
+
+        <div class="flash-details">
+          <span class="section-tag">Flash Specification</span>
+          <h3 id="flash-title" class="flash-title">Memento Mori — The Obsidian Raven</h3>
+          <p id="flash-desc" class="flash-description">
+            Etched in 1888 style copperplate lineation. Features the sentinel raven perched upon a weathered cranial relic draped in acanthus filigree.
+          </p>
+
+          <ul class="flash-specs-list">
+            <li>
+              <span>Recommended Placement</span>
+              <strong id="flash-placement">Forearm, Clavicle, or Shoulder Blade</strong>
+            </li>
+            <li>
+              <span>Parlour Duration</span>
+              <strong id="flash-time">4–6 Hours in Bone Parlour</strong>
+            </li>
+            <li>
+              <span>Needlework Method</span>
+              <strong id="flash-needle">03 Bugpin Fine-Line Lining & Charcoal Shading</strong>
+            </li>
+          </ul>
+
+          <div>
+            <button class="btn-primary open-scriptorium-btn">Inscribe This Design</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornate-divider">
+      <div class="ornate-line"></div>
+      <span class="ornate-icon">♦</span>
+      <div class="ornate-line"></div>
+    </div>
+
+    <!-- SECTION 4: CARTOGRAPHY & SANCTUM LOCATION -->
+    <section id="sanctum" class="victorian-section">
+      <div style="text-align: center;">
+        <span class="section-tag">Sanctum Cartography</span>
+        <h2 class="section-heading">Subterranean Sanctuary</h2>
+        <p class="section-lead" style="margin: 0 auto;">
+          The Physical Graffiti parlour is sequestered in the subterranean vaults beneath the cobblestone alleyways of Seven Dials and Covent Garden.
+        </p>
+      </div>
+
+      <div class="sanctum-grid">
+        <div class="cartography-card">
+          <img src="assets/images/cartography.jpg" alt="Antique Victorian Map of London Seven Dials marking the studio location">
+        </div>
+
+        <div class="sanctum-info">
+          <div class="sanctum-block">
+            <div class="sanctum-label">Parlour Address</div>
+            <div class="sanctum-value">
+              Vault No. VII, Beneath Little Earl Street<br>
+              Seven Dials & Covent Garden, London WC2
+            </div>
+          </div>
+
+          <div class="sanctum-block">
+            <div class="sanctum-label">Sanctuary Hours</div>
+            <div class="sanctum-value">
+              Monday through Saturday: From Gaslight Dusk until Midnight<br>
+              Sunday: Private Bespoke Full-Day Sittings Only
+            </div>
+          </div>
+
+          <div class="sanctum-block">
+            <div class="sanctum-label">Admission Protocol</div>
+            <div class="sanctum-value">
+              Strictly by prior commission. Tap the brass skull door knocker thrice upon arrival in Little Earl Street alley.
+            </div>
+          </div>
+
+          <div>
+            <button class="btn-primary open-scriptorium-btn" style="width: 100%;">Commission Your Inscription</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- BOOKING SCRIPTORIUM (MODAL) -->
+  <div id="booking-modal" class="modal-backdrop">
+    <div class="scriptorium-modal">
+      <button id="modal-close" class="modal-close-btn">&times;</button>
+      
+      <div class="scriptorium-header">
+        <span class="section-tag">The Scriptorium</span>
+        <h3 class="scriptorium-title">Commission an Inscription</h3>
+        <p class="scriptorium-desc">Enter your details into the studio ledger to request your private sitting.</p>
+      </div>
+
+      <form id="scriptorium-form" class="scriptorium-form">
+        <div class="form-group">
+          <label class="form-label" for="patron-name">Patron Name</label>
+          <input type="text" id="patron-name" class="form-input" placeholder="e.g. Lord / Lady Blackwood" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="artist-select">Select Master Inker</label>
+          <select id="artist-select" class="form-select">
+            <option value="archibald">Lord Archibald Graves (Copperplate & Etching)</option>
+            <option value="evangeline">Lady Evangeline Marrow (Botanicals & Mourning Lace)</option>
+            <option value="viktor">Baron Viktor Von Ossis (Scrimshaw & Blackwork)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="tattoo-placement">Desired Placement on Canvas</label>
+          <input type="text" id="tattoo-placement" class="form-input" placeholder="e.g. Forearm, Ribcage, Backpiece">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="session-date">Preferred Solstice / Sitting Date</label>
+          <input type="date" id="session-date" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="design-vision">Vision / Inscription Notes</label>
+          <textarea id="design-vision" class="form-textarea" rows="3" placeholder="Describe the symbol, passage, or grimoire motif you wish to carry for eternity..."></textarea>
+        </div>
+
+        <button type="submit" class="form-submit-btn">Seal Inscription Pact</button>
+      </form>
+
+      <div id="scriptorium-confirmation" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- SANCTUARY FOOTER -->
+  <footer class="sanctuary-footer">
+    <div class="footer-content">
+      <div class="footer-brand">PHYSICAL GRAFFITI</div>
+      <div class="footer-latin">"Mors Vincit Omnia, Sed Ars Longa Est"</div>
+      <p style="color: #888; font-size: 13px; max-width: 500px; line-height: 1.6;">
+        An immortal sanctuary for fine-line copperplate tattooing, anatomical art, and bespoke Victorian elegance.
+      </p>
+      <div class="footer-copy">
+        © 1888 – 2026 Physical Graffiti Tattoo Atelier. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/particles.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/three-hero.js"></script>
+</body>
+</html>
